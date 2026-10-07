@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  只负责按 state_selected 切换形状；着色交给 app:tint="@color/star_tint"。
+  <item android:tint> 是 API 23 才有的属性，minSdk 21 下会被忽略导致两态同色。
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/ic_star_filled" android:state_selected="true" />
+    <item android:drawable="@drawable/ic_star" />
+</selector>

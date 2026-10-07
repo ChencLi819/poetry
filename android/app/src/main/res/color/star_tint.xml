@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  收藏星的两态色。selector 的 <item android:tint> 要 API 23 才生效，
+  minSdk 21 上会被静默忽略，所以颜色放在 ColorStateList 里由 app:tint 消费。
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/accent" android:state_selected="true" />
+    <item android:color="@color/text_muted" />
+</selector>

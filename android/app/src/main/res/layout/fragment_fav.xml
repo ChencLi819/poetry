@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/fav_header"
+        style="@style/Text.AppTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/gutter"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/tab_fav" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fav_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingLeft="@dimen/gutter"
+        android:paddingRight="@dimen/gutter"
+        android:paddingBottom="@dimen/list_pad_bottom" />
+
+    <LinearLayout
+        android:id="@+id/fav_empty"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:visibility="gone">
+
+        <FrameLayout
+            android:layout_width="72dp"
+            android:layout_height="72dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_badge" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_star"
+                app:tint="@color/accent" />
+        </FrameLayout>
+
+        <TextView
+            style="@style/Text.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:gravity="center"
+            android:lineSpacingExtra="6dp"
+            android:text="@string/empty_fav" />
+    </LinearLayout>
+</LinearLayout>

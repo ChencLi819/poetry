@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="36dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_handle" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="520dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="22dp"
+            android:paddingTop="12dp"
+            android:paddingRight="22dp"
+            android:paddingBottom="28dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/zi_char"
+                    style="@style/Text.ZiHead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/accent" />
+
+                <TextView
+                    android:id="@+id/zi_py"
+                    style="@style/Text.RubyHead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/zi_meta"
+                style="@style/Text.Meta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp" />
+
+            <TextView
+                android:id="@+id/zi_form"
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp"
+                android:background="@color/border" />
+
+            <LinearLayout
+                android:id="@+id/zi_senses_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="13dp"
+                    android:background="@drawable/bg_bar"
+                    android:backgroundTint="@color/palette_ink" />
+
+                <TextView
+                    style="@style/Text.Section"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/zi_senses"
+                    android:textColor="@color/palette_ink_deep" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/zi_senses"
+                style="@style/Text.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp" />
+
+            <LinearLayout
+                android:id="@+id/zi_gloss_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="13dp"
+                    android:background="@drawable/bg_bar"
+                    android:backgroundTint="@color/palette_pine" />
+
+                <TextView
+                    style="@style/Text.Section"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/zi_gloss"
+                    android:textColor="@color/palette_pine_deep" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/zi_gloss"
+                style="@style/Text.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp" />
+
+            <LinearLayout
+                android:id="@+id/zi_ev_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="13dp"
+                    android:background="@drawable/bg_bar"
+                    android:backgroundTint="@color/palette_lotus" />
+
+                <TextView
+                    style="@style/Text.Section"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/zi_evidence"
+                    android:textColor="@color/palette_lotus_deep" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/zi_evidence"
+                style="@style/Text.Excerpt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp" />
+
+            <LinearLayout
+                android:id="@+id/zi_phrase_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="13dp"
+                    android:background="@drawable/bg_bar"
+                    android:backgroundTint="@color/palette_gold" />
+
+                <TextView
+                    style="@style/Text.Section"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/zi_phrase"
+                    android:textColor="@color/palette_gold_deep" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/zi_phrase"
+                style="@style/Text.Excerpt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp" />
+
+            <TextView
+                android:id="@+id/zi_empty"
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="@string/zi_not_found"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/zi_src"
+                style="@style/Text.Meta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/zi_source" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

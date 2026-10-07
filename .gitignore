@@ -1,0 +1,44 @@
+# ---- 构建产物 ----
+android/app/build/
+android/build/
+android/.gradle/
+android/captures/
+.gradle/
+build/
+*.apk
+*.aab
+*.ap_
+
+# ---- 本机环境 / 私密配置 ----
+local.properties
+# 签名密钥（含私钥）不得入库
+*.keystore
+*.jks
+keystore.properties
+
+# ---- 大体积语料与派生数据库 ----
+# 这些由 tools/ 下的脚本生成，体积超过 GitHub 单文件 100MB 上限，
+# 不随源码分发；构建方式见 README「数据准备」。
+android/app/src/main/assets/poems.db
+data/poems.raw.json
+data/public.raw.json
+data/broken.json
+data/errors.log
+vendor/
+raw/
+
+# ---- 缓存 / 临时 / 日志 ----
+__pycache__/
+*.py[cod]
+_tmp/
+*.log
+
+# ---- 工具与系统 ----
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
+.vscode/
+
+# ---- WorkBuddy 工作区数据（含私人工作日志）----
+.workbuddy/

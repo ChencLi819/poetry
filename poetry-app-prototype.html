@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>古诗词 App · 前端页面原型</title>
+<style>
+  :root{
+    --paper:#F6F1E7;        /* 宣纸 */
+    --paper-deep:#EFE7D6;   /* 深宣纸 */
+    --ink:#2B2B28;          /* 浓墨 */
+    --ink-2:#6B665A;        /* 淡墨 */
+    --ink-3:#9C968A;        /* 灰墨 */
+    --cinnabar:#A63F3B;     /* 朱砂 */
+    --indigo:#3D5A5B;       /* 黛青 */
+    --gold:#B8946A;         /* 缃金 */
+    --line:#E3DAC7;
+    --radius:18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:
+      radial-gradient(1200px 500px at 15% -10%, #FBF8F0 0%, transparent 60%),
+      radial-gradient(900px 480px at 90% 110%, #EAE2CF 0%, transparent 55%),
+      #E9E2D2;
+    font-family:"Noto Serif SC","Source Han Serif SC","STSong","SimSun",serif;
+    color:var(--ink);
+    padding:56px 48px 72px;
+  }
+  /* ============ 画布标题 ============ */
+  .board-head{max-width:1520px;margin:0 auto 40px;display:flex;justify-content:space-between;align-items:flex-end;}
+  .board-head h1{font-size:30px;font-weight:600;letter-spacing:6px;}
+  .board-head h1 em{font-style:normal;color:var(--cinnabar);}
+  .board-head p{color:var(--ink-2);font-size:13px;margin-top:10px;letter-spacing:2px;}
+  .board-head .seal{
+    width:52px;height:52px;border:2px solid var(--cinnabar);color:var(--cinnabar);
+    display:flex;align-items:center;justify-content:center;border-radius:8px;
+    font-size:20px;letter-spacing:0;transform:rotate(6deg);
+  }
+  .screen-row{max-width:1520px;margin:0 auto;display:flex;gap:40px;flex-wrap:wrap;justify-content:center;}
+  .screen-wrap{width:392px;flex:0 0 auto;}
+  .screen-label{text-align:center;margin-bottom:14px;}
+  .screen-label b{font-size:15px;letter-spacing:3px;}
+  .screen-label span{display:block;font-size:11px;color:var(--ink-3);margin-top:4px;letter-spacing:1px;}
+  /* ============ 手机壳 ============ */
+  .phone{
+    width:392px;height:848px;background:var(--paper);
+    border-radius:44px;border:1px solid #CFC5AE;
+    box-shadow:0 30px 60px -18px rgba(60,50,30,.35), 0 4px 14px rgba(60,50,30,.12);
+    overflow:hidden;position:relative;display:flex;flex-direction:column;
+  }
+  .statusbar{
+    height:44px;flex:0 0 auto;display:flex;justify-content:space-between;align-items:center;
+    padding:0 26px;font-size:13px;font-weight:600;color:var(--ink);
+  }
+  .statusbar .icons{display:flex;gap:6px;align-items:center;}
+  .sig{width:16px;height:10px;background:var(--ink);border-radius:2px;
+    clip-path:polygon(0 100%,100% 0,100% 100%);}
+  .batt{width:22px;height:11px;border:1.5px solid var(--ink);border-radius:3px;position:relative;}
+  .batt::before{content:"";position:absolute;inset:1.5px;right:5px;background:var(--ink);border-radius:1px;}
+  .batt::after{content:"";position:absolute;right:-4px;top:3px;width:2px;height:4px;background:var(--ink);border-radius:0 1px 1px 0;}
+  .screen-body{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative;}
+  /* ============ 通用组件 ============ */
+  .topbar{padding:6px 24px 14px;display:flex;align-items:center;justify-content:space-between;}
+  .topbar .t-title{font-size:18px;font-weight:600;letter-spacing:4px;}
+  .topbar .t-back{font-size:18px;color:var(--ink);}
+  .topbar .t-act{font-size:12px;color:var(--ink-2);letter-spacing:1px;}
+  .chip{
+    display:inline-flex;align-items:center;padding:5px 12px;border-radius:999px;
+    font-size:11px;letter-spacing:1px;border:1px solid var(--line);color:var(--ink-2);background:#FBF8F1;
+  }
+  .chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .seal-mini{
+    width:34px;height:34px;border-radius:9px;background:var(--cinnabar);color:#F8EFE2;
+    font-size:13px;display:flex;align-items:center;justify-content:center;letter-spacing:0;
+  }
+  .tag{font-size:10px;color:var(--cinnabar);border:1px solid #E0C4BC;background:#F8EFE8;
+    padding:2px 8px;border-radius:999px;letter-spacing:1px;}
+  .poem-line{letter-spacing:2px;}
+  .section-h{display:flex;justify-content:space-between;align-items:baseline;padding:0 24px;margin:22px 0 12px;}
+  .section-h b{font-size:14px;letter-spacing:3px;}
+  .section-h b::before{content:"◆";font-size:8px;color:var(--cinnabar);margin-right:8px;vertical-align:2px;}
+  .section-h a{font-size:11px;color:var(--ink-3);text-decoration:none;letter-spacing:1px;}
+  .bottom-nav{
+    flex:0 0 auto;height:78px;border-top:1px solid var(--line);background:rgba(250,246,238,.92);
+    display:flex;align-items:flex-start;padding-top:10px;
+  }
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:var(--ink-3);letter-spacing:1px;}
+  .nav-item svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.6;}
+  .nav-item.on{color:var(--ink);font-weight:600;}
+  .nav-item.on svg{stroke:var(--cinnabar);}
+  .nav-item.center{margin-top:-22px;}
+  .nav-fab{
+    width:46px;height:46px;border-radius:50%;background:var(--ink);color:var(--paper);
+    display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(43,43,40,.35);
+  }
+  .nav-fab svg{width:20px;height:20px;stroke:var(--paper);fill:none;stroke-width:1.8;}
+  /* 山影装饰 */
+  .mount{position:absolute;left:0;right:0;bottom:0;pointer-events:none;opacity:.5;}
+  /* ============ 屏1 首页 ============ */
+  .home-greet{padding:8px 24px 0;}
+  .home-greet .date{font-size:11px;color:var(--ink-3);letter-spacing:2px;}
+  .home-greet h2{font-size:22px;letter-spacing:3px;margin-top:6px;}
+  .home-greet h2 em{font-style:normal;color:var(--cinnabar);}
+  .hero-card{
+    margin:16px 20px 0;border-radius:var(--radius);padding:22px 20px 18px;position:relative;overflow:hidden;
+    background:linear-gradient(150deg,#3E3A33 0%,#2B2B28 55%,#3A4A48 100%);
+    color:#F1EAD9;box-shadow:0 14px 30px -10px rgba(43,43,40,.5);
+  }
+  .hero-card .badge{font-size:10px;letter-spacing:3px;color:#D9C9A3;border:1px solid rgba(217,201,163,.5);
+    padding:3px 10px;border-radius:999px;display:inline-block;}
+  .hero-card h3{font-size:21px;letter-spacing:3px;margin-top:12px;font-weight:600;}
+  .hero-card .who{font-size:11px;color:#BFB69E;margin-top:5px;letter-spacing:2px;}
+  .hero-card .verse{margin-top:14px;font-size:14px;line-height:2;letter-spacing:2px;color:#EFE6D2;}
+  .hero-card .verse i{display:block;font-style:normal;}
+  .hero-card .ops{display:flex;gap:10px;margin-top:16px;}
+  .hero-card .op{
+    flex:1;text-align:center;font-size:11px;letter-spacing:2px;padding:8px 0;border-radius:10px;
+    border:1px solid rgba(241,234,217,.35);color:#EFE6D2;background:rgba(255,255,255,.06);
+  }
+  .hero-card .op.pri{background:var(--cinnabar);border-color:var(--cinnabar);color:#F8EFE2;}
+  .hero-moon{position:absolute;right:-26px;top:-30px;width:120px;height:120px;border-radius:50%;
+    background:radial-gradient(circle at 38% 38%, rgba(240,225,190,.32), rgba(240,225,190,.05) 62%, transparent 70%);}
+  .cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 20px;}
+  .cat-cell{
+    background:#FBF8F1;border:1px solid var(--line);border-radius:14px;
+    padding:12px 4px 10px;text-align:center;
+  }
+  .cat-cell .zi{font-size:17px;letter-spacing:1px;}
+  .cat-cell .zi b{font-weight:600;}
+  .cat-cell .zi span{color:var(--cinnabar);}
+  .cat-cell small{display:block;font-size:9px;color:var(--ink-3);margin-top:5px;letter-spacing:1px;}
+  .feed-item{
+    margin:0 20px 10px;background:#FBF8F1;border:1px solid var(--line);border-radius:16px;
+    padding:14px 16px;display:flex;align-items:center;gap:14px;
+  }
+  .feed-item .verse-prev{flex:1;min-width:0;}
+  .feed-item .verse-prev h4{font-size:14px;letter-spacing:2px;font-weight:600;}
+  .feed-item .verse-prev p{font-size:10px;color:var(--ink-3);margin-top:4px;letter-spacing:1px;}
+  .feed-item .verse-prev .tags{margin-top:7px;display:flex;gap:6px;}
+  .feed-item .like{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;color:var(--cinnabar);font-size:14px;flex:0 0 auto;}
+  /* ============ 屏2 分类 ============ */
+  .dyn-tabs{display:flex;gap:8px;padding:2px 20px 14px;overflow:hidden;}
+  .filter-bar{display:flex;gap:8px;padding:0 20px 4px;flex-wrap:wrap;}
+  .cat-list{margin-top:6px;}
+  .cat-card{
+    margin:0 20px 12px;border-radius:16px;padding:16px 18px;color:#F3ECDC;position:relative;overflow:hidden;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .cat-card h4{font-size:16px;letter-spacing:3px;}
+  .cat-card small{font-size:10px;opacity:.75;letter-spacing:1px;display:block;margin-top:6px;}
+  .cat-card .big{position:absolute;right:10px;bottom:-14px;font-size:56px;opacity:.14;letter-spacing:0;}
+  .cat-card .arrow{font-size:16px;opacity:.8;}
+  /* ============ 屏3 详情 ============ */
+  .detail-tabs{display:flex;gap:22px;padding:14px 24px 0;border-bottom:1px solid var(--line);}
+  .detail-tabs span{font-size:13px;letter-spacing:2px;color:var(--ink-3);padding-bottom:10px;position:relative;}
+  .detail-tabs span.on{color:var(--ink);font-weight:600;}
+  .detail-tabs span.on::after{content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:-1px;
+    width:22px;height:3px;border-radius:2px;background:var(--cinnabar);}
+  .poem-body{padding:20px 26px 0;text-align:center;}
+  .poem-body h3{font-size:20px;letter-spacing:4px;}
+  .poem-body .meta{font-size:11px;color:var(--ink-3);margin-top:7px;letter-spacing:2px;}
+  .poem-body .verse{margin-top:16px;font-size:15px;line-height:2.1;letter-spacing:3px;color:#3A392F;}
+  .poem-body .verse i{display:block;font-style:normal;}
+  .poem-tags{display:flex;gap:8px;justify-content:center;margin-top:14px;}
+  .yiwen-box{
+    margin:16px 22px 0;background:#FBF8F1;border:1px solid var(--line);border-radius:14px;
+    padding:14px 16px;font-size:12px;line-height:1.9;color:var(--ink-2);letter-spacing:1px;
+  }
+  .yiwen-box b{display:block;font-size:11px;color:var(--cinnabar);letter-spacing:2px;margin-bottom:6px;}
+  .act-bar{display:flex;justify-content:space-around;margin:14px 22px 0;padding:12px 6px;
+    border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);}
+  .act-bar .a{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:10px;color:var(--ink-2);letter-spacing:1px;}
+  .act-bar .a svg{width:19px;height:19px;stroke:var(--ink-2);fill:none;stroke-width:1.6;}
+  .act-bar .a.hot svg{stroke:var(--cinnabar);fill:var(--cinnabar);stroke-width:0;}
+  .dict-tip{
+    margin:14px 22px 0;display:flex;align-items:center;gap:12px;background:#F2EEE2;
+    border-radius:14px;padding:12px 14px;border:1px solid var(--line);
+  }
+  .dict-tip .zi-box{width:42px;height:42px;border-radius:10px;background:var(--paper);border:1px solid var(--gold);
+    display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--ink);}
+  .dict-tip .tx{flex:1;font-size:11px;color:var(--ink-2);line-height:1.6;}
+  .dict-tip .tx b{color:var(--ink);font-size:12px;letter-spacing:1px;}
+  /* ============ 屏4 搜索 ============ */
+  .search-box{
+    margin:4px 20px 0;display:flex;align-items:center;gap:10px;background:#FBF8F1;
+    border:1.5px solid var(--ink);border-radius:999px;padding:11px 16px;
+  }
+  .search-box svg{width:17px;height:17px;stroke:var(--ink-2);fill:none;stroke-width:1.8;flex:0 0 auto;}
+  .search-box span{font-size:12px;color:var(--ink-3);letter-spacing:2px;}
+  .search-box .btn{margin-left:auto;font-size:11px;color:#F8EFE2;background:var(--cinnabar);
+    border-radius:999px;padding:5px 13px;letter-spacing:2px;}
+  .hot-cloud{display:flex;flex-wrap:wrap;gap:9px;padding:0 20px;}
+  .hot-cloud .chip.big{font-size:12px;padding:8px 15px;}
+  .rank-item{display:flex;align-items:center;gap:13px;padding:11px 24px;}
+  .rank-item .no{width:20px;font-size:13px;color:var(--ink-3);font-weight:600;}
+  .rank-item:nth-child(-n+3) .no{color:var(--cinnabar);}
+  .rank-item .rt{flex:1;}
+  .rank-item .rt b{font-size:13px;letter-spacing:2px;font-weight:600;}
+  .rank-item .rt small{display:block;font-size:10px;color:var(--ink-3);margin-top:3px;letter-spacing:1px;}
+  .rank-item .trend{font-size:10px;color:var(--gold);letter-spacing:1px;}
+  /* ============ 屏5 字典 ============ */
+  .zi-hero{
+    margin:10px 20px 0;border-radius:var(--radius);background:linear-gradient(160deg,#3E3A33,#2B2B28);
+    color:#F1EAD9;padding:26px 20px 20px;display:flex;gap:20px;align-items:center;position:relative;overflow:hidden;
+  }
+  .zi-hero .big-z{font-size:84px;line-height:1;font-weight:600;text-shadow:0 0 26px rgba(240,225,190,.25);}
+  .zi-hero .info{flex:1;}
+  .zi-hero .info .py{font-size:15px;letter-spacing:1px;color:#D9C9A3;}
+  .zi-hero .info .py span{font-size:11px;color:#9A917B;margin-left:8px;}
+  .zi-hero .stats{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  .zi-hero .stats span{font-size:10px;border:1px solid rgba(217,201,163,.45);border-radius:999px;
+    padding:3px 10px;letter-spacing:1px;color:#EFE6D2;}
+  .zi-sec{padding:0 24px;margin-top:20px;}
+  .zi-sec .h{font-size:13px;letter-spacing:3px;font-weight:600;margin-bottom:9px;}
+  .zi-sec .h::before{content:"◆";font-size:8px;color:var(--cinnabar);margin-right:8px;vertical-align:2px;}
+  .sense-item{display:flex;gap:9px;font-size:12px;line-height:1.8;color:var(--ink-2);margin-bottom:7px;letter-spacing:.5px;}
+  .sense-item b{color:var(--cinnabar);font-weight:600;}
+  .quote-box{background:#FBF8F1;border:1px solid var(--line);border-radius:12px;padding:12px 14px;
+    font-size:12px;line-height:1.9;color:var(--ink-2);letter-spacing:1px;}
+  .quote-box b{color:var(--ink);}
+  .stroke-demo{display:flex;gap:10px;align-items:flex-end;}
+  .stroke-demo .cell{width:58px;height:58px;border:1px solid var(--gold);border-radius:10px;
+    background:var(--paper);display:flex;align-items:center;justify-content:center;font-size:34px;color:var(--ink);}
+  .stroke-demo .cell i{font-style:normal;opacity:1;}
+  .stroke-demo .cell.g1{opacity:.22;}
+  .stroke-demo .cell.g2{opacity:.45;}
+  .stroke-demo .cell.g3{opacity:.7;}
+  .stroke-demo small{font-size:9px;color:var(--ink-3);text-align:center;display:block;margin-top:4px;letter-spacing:1px;}
+  /* ============ 屏6 我的 ============ */
+  .me-head{padding:10px 24px 18px;display:flex;align-items:center;gap:14px;}
+  .avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(145deg,#4A453C,#2B2B28);
+    color:#E9DDC0;font-size:22px;display:flex;align-items:center;justify-content:center;border:2px solid var(--gold);}
+  .me-head .n b{font-size:17px;letter-spacing:2px;}
+  .me-head .n p{font-size:10px;color:var(--ink-3);margin-top:5px;letter-spacing:1px;}
+  .me-head .n p em{font-style:normal;color:var(--gold);}
+  .stat-strip{
+    margin:0 20px;border-radius:16px;background:#FBF8F1;border:1px solid var(--line);
+    display:flex;padding:15px 0;
+  }
+  .stat-strip .s{flex:1;text-align:center;}
+  .stat-strip .s b{font-size:19px;font-weight:600;letter-spacing:1px;}
+  .stat-strip .s b em{font-style:normal;color:var(--cinnabar);}
+  .stat-strip .s small{display:block;font-size:9px;color:var(--ink-3);margin-top:4px;letter-spacing:1px;}
+  .stat-strip .s + .s{border-left:1px dashed var(--line);}
+  .week-card{
+    margin:12px 20px 0;border-radius:16px;border:1px solid var(--line);background:#FBF8F1;padding:14px 16px;
+  }
+  .week-card .h{display:flex;justify-content:space-between;font-size:12px;letter-spacing:2px;font-weight:600;margin-bottom:11px;}
+  .week-card .h span{color:var(--gold);font-size:10px;letter-spacing:1px;font-weight:400;}
+  .bars{display:flex;gap:9px;align-items:flex-end;height:56px;}
+  .bars .b{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px;height:100%;}
+  .bars .b i{display:block;width:70%;border-radius:4px 4px 2px 2px;background:var(--ink-3);opacity:.35;}
+  .bars .b.on i{background:var(--cinnabar);opacity:1;}
+  .bars .b small{font-size:8px;color:var(--ink-3);}
+  .me-list{margin:16px 20px 0;border:1px solid var(--line);border-radius:16px;background:#FBF8F1;overflow:hidden;}
+  .me-row{display:flex;align-items:center;gap:12px;padding:13px 16px;font-size:13px;letter-spacing:2px;}
+  .me-row + .me-row{border-top:1px solid var(--line);}
+  .me-row .ic{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+  .me-row .ic.a{background:#F4E4E0;color:var(--cinnabar);}
+  .me-row .ic.b{background:#E8EDE6;color:var(--indigo);}
+  .me-row .ic.c{background:#F2EAD8;color:var(--gold);}
+  .me-row .cnt{margin-left:auto;font-size:11px;color:var(--ink-3);letter-spacing:1px;}
+  .me-row .arr{color:var(--ink-3);font-size:13px;}
+  /* ============ 设计说明 ============ */
+  .spec{
+    max-width:1520px;margin:64px auto 0;background:var(--paper);border:1px solid var(--line);
+    border-radius:24px;padding:36px 44px;display:flex;gap:56px;flex-wrap:wrap;
+    box-shadow:0 20px 44px -20px rgba(60,50,30,.25);
+  }
+  .spec h3{font-size:15px;letter-spacing:4px;margin-bottom:18px;}
+  .spec h3::before{content:"◆";font-size:9px;color:var(--cinnabar);margin-right:9px;vertical-align:2px;}
+  .swatches{display:flex;gap:14px;flex-wrap:wrap;}
+  .sw{width:84px;}
+  .sw i{display:block;height:56px;border-radius:12px;border:1px solid rgba(0,0,0,.06);}
+  .sw small{display:block;font-size:10px;color:var(--ink-2);margin-top:7px;letter-spacing:1px;line-height:1.6;}
+  .type-demo .t1{font-size:24px;letter-spacing:4px;}
+  .type-demo .t2{font-size:15px;letter-spacing:2px;margin-top:12px;color:#3A392F;}
+  .type-demo .t3{font-size:12px;color:var(--ink-2);margin-top:12px;letter-spacing:1px;line-height:2;}
+  .spec-note{flex:1;min-width:300px;font-size:12px;color:var(--ink-2);line-height:2.1;letter-spacing:1px;}
+  .spec-note b{color:var(--ink);}
+</style>
+</head>
+<body>
+
+<div class="board-head">
+  <div>
+    <h1>古诗词 App <em>·</em> 前端页面原型</h1>
+    <p>水墨宣纸视觉方向 / 6 个核心页面 / iOS 390 × 844 / 衬线字体体系</p>
+  </div>
+  <div class="seal">诗</div>
+</div>
+
+<div class="screen-row">
+
+  <!-- ============ 屏 1 · 首页 ============ -->
+  <div class="screen-wrap">
+    <div class="screen-label"><b>01 · 首页</b><span>每日一诗 / 分类入口 / 个性化推荐</span></div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><div class="icons"><div class="sig"></div><div class="batt"></div></div></div>
+      <div class="screen-body">
+        <div class="home-greet">
+          <div class="date">十月初四 · 星期日 · 晴</div>
+          <h2>今日宜读<em>诗</em></h2>
+        </div>
+
+        <div class="hero-card">
+          <div class="hero-moon"></div>
+          <span class="badge">每日一诗</span>
+          <h3>水调歌头 · 明月几时有</h3>
+          <div class="who">苏轼 · 宋 · 豪放词</div>
+          <div class="verse"><i>但愿人长久，</i><i>千里共婵娟。</i></div>
+          <div class="ops"><div class="op pri">开始诵读</div><div class="op">加入收藏</div></div>
+        </div>
+
+        <div class="section-h"><b>分类浏览</b><a>全部 12 类 ›</a></div>
+        <div class="cat-grid">
+          <div class="cat-cell"><div class="zi"><b>唐</b><span>诗</span></div><small>唐诗三百首</small></div>
+          <div class="cat-cell"><div class="zi"><b>宋</b><span>词</span></div><small>宋词精选</small></div>
+          <div class="cat-cell"><div class="zi"><b>诗</b><span>经</span></div><small>先秦 · 国风</small></div>
+          <div class="cat-cell"><div class="zi"><b>古</b><span>文</span></div><small>小初高</small></div>
+        </div>
+
+        <div class="section-h"><b>为你推荐</b><a>换一批</a></div>
+        <div class="feed-item">
+          <div class="verse-prev">
+            <h4>关山月</h4>
+            <p>关山三五月，客子忆秦川 · 徐陵</p>
+            <div class="tags"><span class="tag">边塞</span><span class="tag">思念</span></div>
+          </div>
+          <div class="like">♡</div>
+        </div>
+        <div class="feed-item" style="margin-bottom:0;">
+          <div class="verse-prev">
+            <h4>卷耳</h4>
+            <p>采采卷耳，不盈顷筐 · 佚名</p>
+            <div class="tags"><span class="tag">诗经 · 国风</span></div>
+          </div>
+          <div class="like">♡</div>
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item on">
+            <svg viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5V20h-5.5v-5h-5v5H4z"/></svg>首页
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>分类
+          </div>
+          <div class="nav-item center">
+            <div class="nav-fab"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></div>
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 24 24"><path d="M12 4c-3.5 2-7 2-7 2v13s3.5 0 7 2c3.5-2 7-2 7-2V6s-3.5 0-7-2z"/><path d="M12 4v17"/></svg>字典
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1.2-4 4-5.5 7-5.5s5.8 1.5 7 5.5"/></svg>我的
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 屏 2 · 分类 ============ -->
+  <div class="screen-wrap">
+    <div class="screen-label"><b>02 · 分类</b><span>十二大分类 / 朝代筛选 / 诗集卡片</span></div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><div class="icons"><div class="sig"></div><div class="batt"></div></div></div>
+      <div class="screen-body">
+        <div class="topbar">
+          <span class="t-title">分类</span>
+          <span class="t-act">共 1208 首</span>
+        </div>
+
+        <div class="dyn-tabs">
+          <span class="chip on">全部</span><span class="chip">先秦</span><span class="chip">汉魏</span>
+          <span class="chip">南北朝</span><span class="chip">唐</span><span class="chip">宋</span><span class="chip">元明清</span>
+        </div>
+
+        <div class="filter-bar">
+          <span class="chip on">唐诗三百首</span><span class="chip">宋词精选</span><span class="chip">诗经</span>
+          <span class="chip">楚辞</span><span class="chip">乐府</span><span class="chip">古诗十九首</span>
+          <span class="chip">婉约词</span><span class="chip">豪放词</span><span class="chip">小学古诗文</span>
+          <span class="chip">初中古诗文</span><span class="chip">高中古诗文</span>
+        </div>
+
+        <div class="section-h"><b>唐诗三百首</b><a>按朝代 ▾</a></div>
+        <div class="cat-card" style="background:linear-gradient(135deg,#5A4638,#3A2E26);">
+          <div><h4>唐诗三百首</h4><small>收录 311 首 · 五言七言 · 律绝俱全</small></div>
+          <span class="arrow">›</span><span class="big">唐</span>
+        </div>
+        <div class="cat-list">
+          <div class="feed-item">
+            <div class="verse-prev">
+              <h4>月下独酌</h4>
+              <p>花间一壶酒，独酌无相亲 · 李白</p>
+              <div class="tags"><span class="tag">五言古诗</span><span class="tag">饮酒</span></div>
+            </div>
+            <div class="like">♡</div>
+          </div>
+          <div class="feed-item">
+            <div class="verse-prev">
+              <h4>望岳</h4>
+              <p>会当凌绝顶，一览众山小 · 杜甫</p>
+              <div class="tags"><span class="tag">五言古诗</span><span class="tag">壮志</span></div>
+            </div>
+            <div class="like">♥</div>
+          </div>
+          <div class="feed-item" style="margin-bottom:0;">
+            <div class="verse-prev">
+              <h4>琵琶行</h4>
+              <p>同是天涯沦落人，相逢何必曾相识 · 白居易</p>
+              <div class="tags"><span class="tag">七言古诗</span></div>
+            </div>
+            <div class="like">♡</div>
+          </div>
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5V20h-5.5v-5h-5v5H4z"/></svg>首页</div>
+          <div class="nav-item on">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>分类
+          </div>
+          <div class="nav-item center"><div class="nav-fab"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></div></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 4c-3.5 2-7 2-7 2v13s3.5 0 7 2c3.5-2 7-2 7-2V6s-3.5 0-7-2z"/><path d="M12 4v17"/></svg>字典</div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1.2-4 4-5.5 7-5.5s5.8 1.5 7 5.5"/></svg>我的</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 屏 3 · 诗词详情 ============ -->
+  <div class="screen-wrap">
+    <div class="screen-label"><b>03 · 诗词详情</b><span>原文 / 译文注释赏析 / 诵读与查字</span></div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><div class="icons"><div class="sig"></div><div class="batt"></div></div></div>
+      <div class="screen-body">
+        <div class="topbar">
+          <span class="t-back">‹</span>
+          <span class="t-title">诗 · 文</span>
+          <span class="t-act">⋯</span>
+        </div>
+
+        <div class="poem-body">
+          <h3>关山月</h3>
+          <div class="meta">南北朝 · 徐陵 · 乐府</div>
+          <div class="verse">
+            <i>关山三五月，客子忆秦川。</i>
+            <i>思妇高楼上，当窗应未眠。</i>
+            <i>星旗映疏勒，云阵上祁连。</i>
+            <i>战气今如此，从军复几年。</i>
+          </div>
+          <div class="poem-tags"><span class="tag">古诗三百首</span><span class="tag">边塞</span><span class="tag">思念</span></div>
+        </div>
+
+        <div class="act-bar">
+          <div class="a hot"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.8-9.5-9C1 8.5 3 5 6.5 5c2.2 0 3.9 1.3 5.5 3.4C13.6 6.3 15.3 5 17.5 5 21 5 23 8.5 21.5 12c-2 4.2-9.5 9-9.5 9z"/></svg>已收藏</div>
+          <div class="a"><svg viewBox="0 0 24 24"><path d="M4 10v4h3l5 4V6l-5 4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg>诵读</div>
+          <div class="a"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>译文</div>
+          <div class="a"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg>字体</div>
+        </div>
+
+        <div class="detail-tabs">
+          <span class="on">译文</span><span>注释</span><span>赏析</span><span>背景</span>
+        </div>
+
+        <div class="yiwen-box">
+          <b>译 文</b>
+          十五的月亮映照在关山上，出征的人儿思念遥远的故乡。想必妻子此时正站在高楼上，对着窗户遥望远在边关难以入眠。旗星照耀在疏勒城头，密布的浓云笼罩着祁连山。如今战争这样残酷频繁，什么时候才能结束这从军生涯回家。
+        </div>
+
+        <div class="dict-tip">
+          <div class="zi-box">疏</div>
+          <div class="tx"><b>文中生字 · 「疏勒」的疏</b><br>拼音 shū · 部首 疋 · 共 12 画，点击查看释义</div>
+          <div style="color:var(--ink-3);">›</div>
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5V20h-5.5v-5h-5v5H4z"/></svg>首页</div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>分类</div>
+          <div class="nav-item center"><div class="nav-fab"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></div></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 4c-3.5 2-7 2-7 2v13s3.5 0 7 2c3.5-2 7-2 7-2V6s-3.5 0-7-2z"/><path d="M12 4v17"/></svg>字典</div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1.2-4 4-5.5 7-5.5s5.8 1.5 7 5.5"/></svg>我的</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 屏 4 · 搜索 ============ -->
+  <div class="screen-wrap">
+    <div class="screen-label"><b>04 · 搜索</b><span>热词联想 / 热榜 / 全文检索</span></div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><div class="icons"><div class="sig"></div><div class="batt"></div></div></div>
+      <div class="screen-body">
+        <div class="topbar"><span class="t-title">搜索</span><span class="t-act">历史</span></div>
+
+        <div class="search-box">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>
+          <span>搜索诗名、诗句、作者…</span>
+          <span class="btn">搜索</span>
+        </div>
+
+        <div class="section-h"><b>热门搜索</b></div>
+        <div class="hot-cloud">
+          <span class="chip big on">明月</span><span class="chip big">思乡</span><span class="chip big">边塞</span>
+          <span class="chip big">春晓</span><span class="chip big">李白</span><span class="chip big">中秋</span>
+          <span class="chip big">送别</span><span class="chip big">登高</span>
+        </div>
+
+        <div class="section-h"><b>诗词热榜</b><a>今日 · 实时</a></div>
+        <div class="rank-item">
+          <span class="no">1</span>
+          <div class="rt"><b>水调歌头 · 明月几时有</b><small>苏轼 · 宋 · 「但愿人长久」搜索 2.4 万次</small></div>
+          <span class="trend">▲ HOT</span>
+        </div>
+        <div class="rank-item">
+          <span class="no">2</span>
+          <div class="rt"><b>静夜思</b><small>李白 · 唐 · 「床前明月光」</small></div>
+          <span class="trend">▲ 3</span>
+        </div>
+        <div class="rank-item">
+          <span class="no">3</span>
+          <div class="rt"><b>将进酒</b><small>李白 · 唐 · 「天生我材必有用」</small></div>
+          <span class="trend">—</span>
+        </div>
+        <div class="rank-item">
+          <span class="no">4</span>
+          <div class="rt"><b>关雎</b><small>佚名 · 先秦 · 诗经 · 国风 · 周南</small></div>
+          <span class="trend">▼ 1</span>
+        </div>
+        <div class="rank-item">
+          <span class="no">5</span>
+          <div class="rt"><b>声声慢 · 寻寻觅觅</b><small>李清照 · 宋 · 婉约词</small></div>
+          <span class="trend">▲ 2</span>
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5V20h-5.5v-5h-5v5H4z"/></svg>首页</div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>分类</div>
+          <div class="nav-item center"><div class="nav-fab" style="outline:2px solid var(--cinnabar);outline-offset:3px;"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></div></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 4c-3.5 2-7 2-7 2v13s3.5 0 7 2c3.5-2 7-2 7-2V6s-3.5 0-7-2z"/><path d="M12 4v17"/></svg>字典</div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1.2-4 4-5.5 7-5.5s5.8 1.5 7 5.5"/></svg>我的</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 屏 5 · 字典 ============ -->
+  <div class="screen-wrap">
+    <div class="screen-label"><b>05 · 字典查字</b><span>拼音部首笔画 / 笔顺演示 / 诗句用例</span></div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><div class="icons"><div class="sig"></div><div class="batt"></div></div></div>
+      <div class="screen-body">
+        <div class="topbar">
+          <span class="t-back">‹</span>
+          <span class="t-title">字 · 典</span>
+          <span class="t-act">1.2 万字</span>
+        </div>
+
+        <div class="zi-hero">
+          <div class="big-z">婵</div>
+          <div class="info">
+            <div class="py">chán<span>蝉音 · 阳平</span></div>
+            <div class="stats">
+              <span>部首 女</span><span>11 画</span><span>左右结构</span><span>常用字</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="zi-sec">
+          <div class="h">基 本 释 义</div>
+          <div class="sense-item"><b>①</b><div>「婵娟」姿态美好，如「婵娟此豸」。</div></div>
+          <div class="sense-item"><b>②</b><div>指美女，如「一带妆楼临水盖，家家分影照婵」。</div></div>
+          <div class="sense-item"><b>③</b><div>指月亮，古诗词中「婵娟」多为明月的美称。</div></div>
+        </div>
+
+        <div class="zi-sec">
+          <div class="h">笔 顺 演 示</div>
+          <div class="stroke-demo">
+            <div class="cell g1"><i>婵</i></div>
+            <div class="cell g2"><i>婵</i></div>
+            <div class="cell g3"><i>婵</i></div>
+            <div class="cell"><i>婵</i></div>
+            <div><small>共 11 画</small></div>
+          </div>
+        </div>
+
+        <div class="zi-sec" style="margin-bottom:14px;">
+          <div class="h">诗 句 用 例</div>
+          <div class="quote-box">
+            「但愿人长久，千里共<b>婵</b>娟。」<br>
+            <span style="font-size:10px;color:var(--ink-3);">—— 苏轼《水调歌头 · 明月几时有》</span>
+          </div>
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5V20h-5.5v-5h-5v5H4z"/></svg>首页</div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>分类</div>
+          <div class="nav-item center"><div class="nav-fab"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></div></div>
+          <div class="nav-item on"><svg viewBox="0 0 24 24"><path d="M12 4c-3.5 2-7 2-7 2v13s3.5 0 7 2c3.5-2 7-2 7-2V6s-3.5 0-7-2z"/><path d="M12 4v17"/></svg>字典</div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1.2-4 4-5.5 7-5.5s5.8 1.5 7 5.5"/></svg>我的</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 屏 6 · 我的 ============ -->
+  <div class="screen-wrap">
+    <div class="screen-label"><b>06 · 我的</b><span>学习统计 / 收藏夹 / 诵读打卡</span></div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><div class="icons"><div class="sig"></div><div class="batt"></div></div></div>
+      <div class="screen-body">
+        <div class="topbar"><span class="t-title">我 的</span><span class="t-act">⚙</span></div>
+
+        <div class="me-head">
+          <div class="avatar">月</div>
+          <div class="n">
+            <b>青莲居士</b>
+            <p>已坚持诵读 <em>128</em> 天 · 连续打卡 <em>12</em> 天</p>
+          </div>
+        </div>
+
+        <div class="stat-strip">
+          <div class="s"><b><em>86</em></b><small>已读诗词</small></div>
+          <div class="s"><b>214</b><small>收藏</small></div>
+          <div class="s"><b>37</b><small>查过字</small></div>
+        </div>
+
+        <div class="week-card">
+          <div class="h">本周诵读 <span>10 月 4 日更新</span></div>
+          <div class="bars">
+            <div class="b"><i style="height:45%"></i><small>一</small></div>
+            <div class="b"><i style="height:60%"></i><small>二</small></div>
+            <div class="b"><i style="height:30%"></i><small>三</small></div>
+            <div class="b"><i style="height:80%"></i><small>四</small></div>
+            <div class="b"><i style="height:55%"></i><small>五</small></div>
+            <div class="b"><i style="height:90%"></i><small>六</small></div>
+            <div class="b on"><i style="height:70%"></i><small>日</small></div>
+          </div>
+        </div>
+
+        <div class="me-list">
+          <div class="me-row"><div class="ic a">♥</div>我的收藏<span class="cnt">214 首</span><span class="arr">›</span></div>
+          <div class="me-row"><div class="ic b">☰</div>诵读历史<span class="cnt">本周 5 篇</span><span class="arr">›</span></div>
+          <div class="me-row"><div class="ic c">⬇</div>离线诗库<span class="cnt">已下载 2 个分类</span><span class="arr">›</span></div>
+          <div class="me-row"><div class="ic b">◎</div>学习目标<span class="cnt">每日 2 首</span><span class="arr">›</span></div>
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5V20h-5.5v-5h-5v5H4z"/></svg>首页</div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>分类</div>
+          <div class="nav-item center"><div class="nav-fab"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></div></div>
+          <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 4c-3.5 2-7 2-7 2v13s3.5 0 7 2c3.5-2 7-2 7-2V6s-3.5 0-7-2z"/><path d="M12 4v17"/></svg>字典</div>
+          <div class="nav-item on"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1.2-4 4-5.5 7-5.5s5.8 1.5 7 5.5"/></svg>我的</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ 设计说明 ============ -->
+<div class="spec">
+  <div>
+    <h3>色 彩 系 统</h3>
+    <div class="swatches">
+      <div class="sw"><i style="background:#F6F1E7;"></i><small>宣纸<br>#F6F1E7</small></div>
+      <div class="sw"><i style="background:#EFE7D6;"></i><small>深宣纸<br>#EFE7D6</small></div>
+      <div class="sw"><i style="background:#2B2B28;"></i><small>浓墨<br>#2B2B28</small></div>
+      <div class="sw"><i style="background:#6B665A;"></i><small>淡墨<br>#6B665A</small></div>
+      <div class="sw"><i style="background:#A63F3B;"></i><small>朱砂<br>#A63F3B</small></div>
+      <div class="sw"><i style="background:#3D5A5B;"></i><small>黛青<br>#3D5A5B</small></div>
+      <div class="sw"><i style="background:#B8946A;"></i><small>缃金<br>#B8946A</small></div>
+    </div>
+  </div>
+  <div class="type-demo">
+    <h3>字 体 层 级</h3>
+    <div class="t1">关山三五月 —— 页面大标题 22–24px</div>
+    <div class="t2">思妇高楼上，当窗应未眠 —— 诗句正文 15px / 行高 2.1 · 辅助文字 12px</div>
+    <div class="t3">注释、译文等辅助信息 12px · 全站使用衬线字体（Noto Serif SC / 宋体族），标题加宽字距 2–6px，强化竖排卷轴式的古典阅读感。</div>
+  </div>
+  <div class="spec-note">
+    <b>设计要点：</b><br>
+    ① 首页以「每日一诗」深色卡为视觉锚点，月晕渐变呼应主题，分类与推荐流保持浅色轻量层级；<br>
+    ② 详情页原文居中排版，译文 / 注释 / 赏析 / 背景以标签页切换，数据结构对齐现有 poems 数据字段（text / yiwen / zhushi / jianxi / beijing）；<br>
+    ③ 详情底部设「文中生字」提示条，点击直达字典查字页（对齐 zi 数据：拼音 / 部首 / 笔画 / 释义 / 笔顺）；<br>
+    ④ 底部导航五等分，中央搜索浮钮（FAB）突出全文检索入口；<br>
+    ⑤ 我的页以诵读打卡与收藏为核心，支撑「每日诵读」的产品闭环。
+  </div>
+</div>
+
+</body>
+</html>

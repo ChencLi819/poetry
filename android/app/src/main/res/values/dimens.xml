@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 间距单一真源：卡片视觉边缘一律落在 16dp -->
+<resources>
+    <dimen name="gutter">16dp</dimen>
+    <!-- 网格页的 RecyclerView 内边距 = gutter 减去卡片自身外边距，保证卡片边缘仍对齐 16dp -->
+    <dimen name="gutter_grid">11dp</dimen>
+    <dimen name="facet_cell_gap">5dp</dimen>
+    <dimen name="list_pad_top">14dp</dimen>
+    <dimen name="list_pad_bottom">16dp</dimen>
+    <dimen name="card_radius">12dp</dimen>
+</resources>

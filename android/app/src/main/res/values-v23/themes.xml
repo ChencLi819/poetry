@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- windowLightStatusBar 自 API 23 起有效，从默认 values 迁出来 -->
+<resources>
+    <style name="Theme.Poetry" parent="Theme.Poetry.Base">
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>

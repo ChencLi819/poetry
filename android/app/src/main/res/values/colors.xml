@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  新中式「胭脂」：瓷白微粉画布（无黄底），主色胭脂玫粉，
+  六色色板取古典色相（胭脂 / 松绿 / 青黛 / 藕荷 / 缃 / 绛），每色三档（主色、浅底、深字）。
+-->
+<resources>
+    <color name="bg">#FAF7F8</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_sunken">#F5EFF2</color>
+    <color name="panel">#F2E6EC</color>
+
+    <color name="border">#EDE2E7</color>
+    <color name="border_strong">#D8C7CF</color>
+
+    <color name="text_primary">#221C21</color>
+    <color name="text_secondary">#4A4248</color>
+    <color name="text_muted">#6E646C</color>
+    <color name="text_tertiary">#A79CA4</color>
+
+    <color name="accent">#C45C82</color>
+    <color name="accent_pressed">#A6446A</color>
+    <color name="accent_tint">#F9E4EC</color>
+    <color name="white">#FFFFFF</color>
+    <color name="ripple">#12000000</color>
+
+    <!-- 今日卡渐变：顶部胭脂粉 → 底部白 -->
+    <color name="hero_from">#F6DEE9</color>
+    <color name="hero_to">#FFFFFF</color>
+    <color name="hero_border">#EFC9DA</color>
+
+    <!-- 分类色板：胭脂 / 松绿 / 青黛 / 藕荷 / 缃 / 绛，每色三档（主色、浅底、深字） -->
+    <color name="palette_rose">#C45C82</color>
+    <color name="palette_rose_bg">#F9E4EC</color>
+    <color name="palette_rose_deep">#94405F</color>
+
+    <color name="palette_pine">#5B8A72</color>
+    <color name="palette_pine_bg">#E6F0EA</color>
+    <color name="palette_pine_deep">#3F6653</color>
+
+    <color name="palette_ink">#4A6491</color>
+    <color name="palette_ink_bg">#E7ECF5</color>
+    <color name="palette_ink_deep">#35496B</color>
+
+    <color name="palette_lotus">#9B7BB8</color>
+    <color name="palette_lotus_bg">#F0E9F7</color>
+    <color name="palette_lotus_deep">#715790</color>
+
+    <color name="palette_gold">#C29344</color>
+    <color name="palette_gold_bg">#F8EEDC</color>
+    <color name="palette_gold_deep">#8F6A24</color>
+
+    <color name="palette_crimson">#A94A5C</color>
+    <color name="palette_crimson_bg">#F7E4E7</color>
+    <color name="palette_crimson_deep">#7E3543</color>
+</resources>
